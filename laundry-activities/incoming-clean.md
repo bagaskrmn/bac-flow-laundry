@@ -12,7 +12,7 @@ flowchart TD
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
-    N_IN["Input:<br/>transaction_id, Array tag_id<br/>scan_device dan activity_name opsional"]
+    N_IN["Input:<br/>transaction_id, Array tag_id<br/>scan_device"]
     N_IN --> N_MASTER{"Linen dan tipe ditemukan?"}
     N_MASTER -->|Tidak| N_UNREG["Tidak ditemukan<br/>unregistered"]
 
@@ -31,20 +31,20 @@ flowchart TD
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
-    N_IN["Payload normal IC:<br/>activity_code = IC<br/>activity_name = Incoming Clean<br/>transaction_id, scan_device, weight<br/>kategori hasil match"]
+    N_IN["Payload transaction_id, scan_device<br/>Semua data hasil match"]
 
-    N_IN --> N_ACTUAL["Tag aktual yang diproses:<br/>matched + additional"]
-    N_ACTUAL --> N_ACT["Buat aktivitas CLEAN<br/>Rekap jumlah + rincian tag"]
-    N_ACT --> N_SCAN["Catat scan Incoming Clean<br/>lokasi = lokasi transaksi<br/>provider = null"]
-    N_SCAN --> N_TRX["last_activity_code = IC"]
-    N_TRX --> N_MASTER["Update master tag aktual:<br/>is_on_provider = false<br/>location_id = lokasi transaksi<br/>last_scaning_date dan updated_at"]
+    N_IN -->N_NOTES["Proses Selain Matched"]
+    N_NOTES --> N_CATAT["Catat ke DB"]
+    N_CATAT --> N_MISSING["MISSING dibuatkan NEWREQ-MS"]
 
-    N_IN --> N_HASMISS{"Missing ada?"}
-    N_HASMISS -->|Ya| N_ID["Bentuk NEWREQ-MS<br/>mengikuti ID transaksi asal"]
-    N_ID --> N_REQ["Buat request pengganti<br/>status = Approved<br/>sumber = Missing Incoming Clean<br/>lokasi = lokasi transaksi"]
-    N_REQ --> N_DETAIL["Detail request:<br/>linen_type_id + quantity missing"]
-    N_HASMISS -->|Tidak| N_DONE["Commit dan respons sukses"]
-    N_DETAIL --> N_DONE
-    N_MASTER --> N_DONE
+    N_IN --> N_ACCEPT["Proses matched"]
+    N_ACCEPT --> N_TRX["Update Transaksi"]
+    N_TRX --> N_ACT["Buat aktivitas<br/>status aktivitas = CLEAN"]
+    N_ACT --> N_QTY["Rekap jumlah seluruh linen"]
+    N_QTY --> N_TAG["Simpan rincian tag<br/>dan insert history linen"]
+    N_TAG --> N_SCAN["update linen<br/>lokasi, status, updated_at,<br/>last_activity_code, last_transaction_id<br/>last_transaction_location_id"]
+
+    N_SCAN --> N_DONE["Commit dan respons sukses"]
+```
     
 ```
