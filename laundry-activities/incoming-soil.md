@@ -15,7 +15,6 @@ flowchart TD
     N_BASE --> N_EXISTS{"Baseline ditemukan?"}
     N_EXISTS -->|Tidak| N_EMPTY["HTTP 200<br/>No transaction found<br/>data = null"]
     N_EXISTS -->|Ya| N_COMP["Bandingkan baseline OSS<br/>dengan semua tag terdaftar yang discan"]
-    N_REG --> N_COMP
 
     N_COMP --> N_MATCH["matched<br/>Tag OSS ikut discan"]
     N_COMP --> N_MISS["missing<br/>Tag OSS tidak discan"]
