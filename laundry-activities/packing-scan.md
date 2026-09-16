@@ -18,7 +18,7 @@ flowchart TD
     N_REQ --> N_TARGET
 
     N_IN --> N_EXIST["Cari PS existing pada ID yang sama<br/>Ambil tag yang sudah dipacking"]
-    N_EXIST --> N_REDUCE["Kurangi target dengan<br/>jumlah packing existing"]
+    N_EXIST --> N_REDUCE["missing awal<br/>max(0, target awal - packing existing)"]
     N_TARGET --> N_REDUCE
     N_EXIST --> N_WAS{"Kandidat sudah dipacking<br/>pada transaksi terpilih?"}
     N_CAND --> N_WAS
@@ -34,10 +34,7 @@ flowchart TD
     N_COMP --> N_MATCH["matched<br/>Jenis sesuai, dalam kuota"]
     N_COMP --> N_ADD["additional<br/>Melebihi kuota atau jenis tidak diminta"]
 
-    N_REDUCE --> N_MISS["missing awal<br/>Target dikurangi jumlah kandidat<br/>terdaftar per jenis"]
-    N_CAND -.-> N_MISS
-    N_MISPLACE -.-> N_NOTE["Missing menghitung kandidat terdaftar,<br/>termasuk yang tidak layak.<br/>Missing 0 belum berarti semua layak."]
-    N_BAD -.-> N_NOTE
+    N_COMP --> N_MISS["missing akhir<br/>max(0, missing awal - jumlah matched)"]
 ```
 
 ## Submit
@@ -61,6 +58,13 @@ flowchart TD
     N_CREATE --> N_SAVE
     N_SAVE --> N_TRX["last_activity_code = PS"]
     N_TRX --> N_MASTER["Update master:<br/>is_on_provider = true<br/>wash_cycle +1<br/>updated_at"]
-    N_DATE --> N_DONE["Commit dan respons sukses"]
-    N_SKIP --> N_DONE
+    N_MASTER --> N_DONE["Commit dan respons sukses"]
+```
+
+## Commit Packing
+
+```mermaid
+flowchart TD
+    N_IN["User/Admin memilih transaction yang sudah dipacking untuk dicommit"]
+    N_IN --> N_LIST["Transaksi yang dapat dicommit hanya yang sudah ter-submit packing < target<br/>User dapat input Tipe Linen dan QTY untuk melengkapi hutang Packing yang sudah dicommit"]
 ```

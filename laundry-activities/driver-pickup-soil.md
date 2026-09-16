@@ -1,3 +1,11 @@
+
+## Get List Transaction
+
+```mermaid
+flowchart TD
+    N_IN["Hanya berisi transactions yang memiliki OSS,<br/>dan tidak memiliki DPS"]
+
+```
 ## Match Scanned Tag ID
 
 ```mermaid

@@ -1,38 +1,27 @@
+## Get List Transaction
+
+```mermaid
+flowchart TD
+    N_IN["Hanya berisi transactions yang memiliki PS,<br/>tidak memiliki DPC, dan Commited"]
+
+```
+
 ## Match Scanned Tag ID
 
 ```mermaid
 flowchart TD
     N_IN["Input:<br/>transaction_id, Array tag_id<br/>scan_device dan activity_name opsional"]
-    N_IN --> N_MASTER["Cari master + registrasi<br/>jenis, status, kondisi, kepemilikan"]
-    N_MASTER --> N_UNREG["Tidak ditemukan<br/>unregistered"]
+    N_IN --> N_MASTER{"Linen dan tipe ditemukan?"}
+    N_MASTER -->|Tidak| N_UNREG["Tidak ditemukan<br/>unregistered"]
 
-    N_IN --> N_MODE{"Jenis transaksi?"}
-    N_MODE -->|TRX| N_OSS["Target = jumlah OSS per jenis"]
-    N_OSS --> N_PART{"is_partial = true?"}
-    N_PART -->|Ya| N_SUB["Kurangi detail request terkait<br/>Query tidak membatasi status Packed"]
-    N_PART -->|Tidak| N_TARGET["Target jumlah"]
-    N_SUB --> N_TARGET
-    N_MODE -->|Request| N_REQ["Target = detail request<br/>ID tetap wajib ada di transactions"]
-    N_REQ --> N_TARGET
+    N_IN --> N_OSS["Target = Tag ID pada PS<br/>di Transaction terpilih"]
+    N_MASTER -->|Ya| N_COMP["Bandingkan Tag ID"]
+    N_OSS --> N_COMP
 
-    N_MODE -->|TRX| N_OWNER["Bandingkan belongs_to_location<br/>dengan lokasi transaksi"]
-    N_MODE -->|Request| N_NOOWNER["Pemeriksaan pemilik dinonaktifkan<br/>missplaced = kosong"]
-    N_MASTER --> N_OWNER
-    N_OWNER --> N_WRONG{"Pemilik tidak null dan berbeda?"}
-    N_WRONG -->|Ya| N_MIS["missplaced"]
-    N_WRONG -->|Tidak| N_COND["Periksa kondisi"]
-    N_NOOWNER --> N_COND
-    N_COND --> N_GOOD["Layak:<br/>CLEAN + GOOD/null"]
-    N_COND --> N_BAD["unproccessable_tag:<br/>bukan CLEAN atau WEAK"]
+    N_COMP -->N_MS["Missing: Ada di Target<br/>tapi tidak ada di Input"]
+    N_COMP -->N_MATCH["Matched: Ada di Target<br/>dan di Input"]
+    N_COMP -->N_ADD["Additional: Tidak ada di Target<br/>tapi ada di Input"]
 
-    N_GOOD --> N_COMP["Bandingkan jenis + jumlah"]
-    N_TARGET --> N_COMP
-    N_COMP --> N_MATCH["matched"]
-    N_COMP --> N_ADD["additional:<br/>kelebihan atau jenis lain"]
-    N_TARGET --> N_MISS["missing:<br/>kekurangan dari jumlah<br/>semua tag terdaftar per jenis"]
-    N_MASTER --> N_MISS
-
-    N_COMP -.-> N_NOTE["Tidak membandingkan tag dengan PS.<br/>Tidak ada already_packed<br/>atau in_other_transaction."]
 ```
 
 ## Submit
