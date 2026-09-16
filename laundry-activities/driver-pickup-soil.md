@@ -9,7 +9,6 @@ flowchart TD
     N_MASTER --> N_UNREG["Tag tidak ditemukan<br/>unregistered"]
 
     N_IN --> N_BASE["Ambil tag aktivitas transaksi<br/>activity_code = match_with<br/>OSS"]
-    N_BASE --> N_NOTE["Baseline tidak dibatasi<br/>hanya category MATCHED"]
     N_BASE --> N_COMP["Bandingkan tag ID"]
     N_REGISTERED --> N_COMP
 
@@ -31,9 +30,7 @@ flowchart TD
 ```mermaid
 flowchart TD
     N_IN["Payload:<br/>activity_code = DPS<br/>transaction_id, activity_name<br/>scan_device, weight<br/>Array registered, Array missing, Array additional"]
-    N_IN --> N_CHECK{"Kode DPS?"}
-    N_CHECK -->|Tidak| N_REJECT["Ditolak"]
-    N_CHECK -->|Ya| N_ACT["Update transaksi menjadi DPS<br/>Buat aktivitas DPS / SOIL<br/>Berat dari payload"]
+    N_IN --> N_ACT["Update transaksi menjadi DPS<br/>Buat aktivitas DPS / SOIL<br/>Berat dari payload"]
 
     N_ACT --> N_QTY["Rekap jumlah per jenis<br/>registered + additional"]
     N_ACT --> N_LOG["Riwayat linen:<br/>registered → MATCHED<br/>missing → MISSING<br/>additional → ADDITIONAL"]
