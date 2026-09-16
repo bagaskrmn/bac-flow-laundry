@@ -16,7 +16,26 @@
       name: 'Laundry Flow',
       repo: '',
       loadSidebar: true,
-      subMaxLevel: 2
+      subMaxLevel: 2,
+      markdown: {
+        renderer: {
+          code: function(code, lang) {
+            if (lang === "mermaid") {
+              return '<div class="mermaid">' + code + '</div>';
+            }
+            return this.origin.code.apply(this, arguments);
+          }
+        }
+      },
+      plugins: [
+        function(hook, vm) {
+          hook.doneEach(function() {
+            if (window.mermaid) {
+              window.mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            }
+          });
+        }
+      ]
     }
   </script>
   
@@ -25,7 +44,6 @@
   
   <!-- Mermaid Support -->
   <script src="//cdn.jsdelivr.net/npm/mermaid@9/dist/mermaid.min.js"></script>
-  <script src="//unpkg.com/docsify-mermaid@latest/dist/docsify-mermaid.js"></script>
   <script>mermaid.initialize({ startOnLoad: true });</script>
 </body>
 </html>
