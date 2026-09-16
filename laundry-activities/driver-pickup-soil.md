@@ -2,6 +2,7 @@
 ## Get List Transaction
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Hanya berisi transactions yang memiliki OSS,<br/>dan tidak memiliki DPS"]
 
@@ -9,6 +10,7 @@ flowchart TD
 ## Match Scanned Tag ID
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Input:<br/>transaction_id<br/>match_with<br/>Array tag_id"]
 
@@ -40,6 +42,7 @@ flowchart TD
 ## Submit
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Payload:<br/>activity_code = DPS<br/>transaction_id, activity_name<br/>scan_device, weight<br/>Array registered, Array missing, Array additional"]
     N_IN --> N_ACT["Update transaksi menjadi DPS<br/>Buat aktivitas DPS / SOIL<br/>Berat dari payload"]

@@ -1,6 +1,7 @@
 ## Match Scanned Tag ID
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Input:<br/>type = IN<br/>id = ID lokasi/RS<br/>scan_device, Array tag_id"]
 
@@ -45,6 +46,7 @@ flowchart TD
 ## Submit
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Payload:<br/>type = IN, id lokasi/RS<br/>scan_device, weight<br/>Array matched, Array missing, Array additional"]
 
@@ -77,6 +79,7 @@ flowchart TD
 ## 1 Scan 2 Transaksi dengan lokasi yang sama
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart LR
     N_T1["OSS TRX-1<br/>A, B"]
     N_T2["OSS TRX-2<br/>C, D"]

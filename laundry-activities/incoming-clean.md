@@ -1,6 +1,7 @@
 ## Get List Transaction
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Hanya berisi transactions yang memiliki PS,<br/>tidak memiliki IC, dan Commited"]
 
@@ -9,6 +10,7 @@ flowchart TD
 ## Match Scanned Tag ID
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Input:<br/>transaction_id, Array tag_id<br/>scan_device dan activity_name opsional"]
     N_IN --> N_MASTER{"Linen dan tipe ditemukan?"}
@@ -27,6 +29,7 @@ flowchart TD
 ## Submit
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Payload normal IC:<br/>activity_code = IC<br/>activity_name = Incoming Clean<br/>transaction_id, scan_device, weight<br/>kategori hasil match"]
 

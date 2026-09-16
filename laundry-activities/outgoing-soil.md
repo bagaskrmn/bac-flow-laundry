@@ -1,6 +1,7 @@
 ## Match Scanned Tag ID
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_START["Input: Array tag_id<br/>Lokasi = user login"]
 
@@ -40,6 +41,7 @@ flowchart TD
 ## Submit
 
 ```mermaid
+%%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Payload:<br/>activity_code, activity_name, scan_device<br/>weight, Array registered<br/>accumulated_transaction_id"]
     N_IN --> N_VALID{"activity_code = OSS?"}
