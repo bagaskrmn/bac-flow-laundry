@@ -14,11 +14,15 @@ flowchart TD
 
     N_COMP --> N_MATCH["registered<br/>Ada di baseline dan discan"]
     N_COMP --> N_MISS["missing<br/>Ada di baseline, tidak discan"]
-    N_COMP --> N_ADD["additional<br/>Terdaftar, di luar baseline"]
+    N_COMP --> N_CHECK_ADD{"location_id = transaction.location_id<br/>dan is_on_provider = false?"}
+
+    N_CHECK_ADD -->|Ya| N_NOT_OUT["not_outgoing"]
+    N_CHECK_ADD -->|Tidak| N_ADD["additional<br/>Terdaftar, di luar baseline"]
 
     N_MATCH --> N_GROUP["Kelompokkan per jenis:<br/>linen_type_id, name, count, Array tag_id"]
     N_MISS --> N_GROUP
     N_ADD --> N_GROUP
+    N_NOT_OUT --> N_GROUP
     N_GROUP --> N_RES["Respons kategori"]
     N_UNREG --> N_RES
 

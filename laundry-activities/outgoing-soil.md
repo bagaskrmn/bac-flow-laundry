@@ -17,7 +17,9 @@ flowchart TD
     N_CHECK -->|Tidak| N_ACC["accumulated_transaction_id = ID transaksi<br/>DPS tidak menghentikan akumulasi"]
     N_ACC --> N_EXIST["Ambil tag pada OSS transaksi tersebut"]
 
-    N_CAND --> N_LAST["Ambil scan terakhir tiap tag<br/>berdasarkan MAX id"]
+    N_CAND --> N_LOC{"location_id linen_lists<br/>= lokasi user login atau is_on_provider TRUE (di BAC)?"}
+    N_LOC -->|Tidak| N_OTHERLOC["in_other_location"]
+    N_LOC -->|Ya| N_LAST["Ambil scan terakhir tiap tag<br/>berdasarkan last_activity_code"]
     N_LAST --> N_OUT{"Scan terakhir = Outgoing Soil<br/>atau Driver Pickup Soil<br/>atau Driver Pickup Soil Scan?"}
     N_OUT -->|Ya| N_ALREADY["already_outgoing"]
     N_OUT -->|Tidak| N_INACC{"Tag sudah ada<br/>di OSS transaksi akumulasi?"}
@@ -25,9 +27,10 @@ flowchart TD
     N_INACC -->|Ya| N_ALREADY
     N_INACC -->|Tidak| N_READY["registered<br/>Dikelompokkan per jenis linen"]
 
-    N_READY --> N_RES["Respons:<br/>accumulated_transaction_id<br/>registered<br/>already_outgoing<br/>unregistered"]
+    N_READY --> N_RES["Respons:<br/>accumulated_transaction_id<br/>registered<br/>already_outgoing<br/>unregistered<br/>in_other_location"]
     N_ALREADY --> N_RES
     N_UNREG --> N_RES
+    N_OTHERLOC --> N_RES
     N_ACC --> N_RES
     N_NEW --> N_RES
 
@@ -56,5 +59,5 @@ flowchart TD
     N_MASTER --> N_BILL["Sinkronkan billing harian<br/>jumlah tag + berat"]
     N_BILL --> N_DONE["Commit dan respons sukses"]
 
-    N_IN -.-> N_TRUST["Submit tidak mengulang match:<br/>already_outgoing dan kelayakan<br/>akumulasi tidak diperiksa ulang"]
+    N_IN -.-> N_TRUST["Submit tidak mengulang match:<br/>already_outgoing, In Other Location dan kelayakan<br/>akumulasi tidak diperiksa ulang"]
 ```
