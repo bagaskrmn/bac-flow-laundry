@@ -20,7 +20,7 @@ flowchart TD
     N_IN --> N_EXIST["Cari PS existing pada ID yang sama<br/>Ambil tag yang sudah dipacking"]
     N_EXIST --> N_REDUCE["Kurangi target dengan<br/>jumlah packing existing"]
     N_TARGET --> N_REDUCE
-    N_EXIST --> N_WAS{"Kandidat sudah dipacking?"}
+    N_EXIST --> N_WAS{"Kandidat sudah dipacking<br/>pada transaksi terpilih?"}
     N_CAND --> N_WAS
     N_WAS -->|Ya| N_PACKED["already_packed<br/>Keluarkan dari kandidat"]
     N_WAS -->|Tidak| N_OWNER{"Pemilik lokasi tidak null<br/>dan berbeda dari target?"}
@@ -34,7 +34,7 @@ flowchart TD
     N_COMP --> N_MATCH["matched<br/>Jenis sesuai, dalam kuota"]
     N_COMP --> N_ADD["additional<br/>Melebihi kuota atau jenis tidak diminta"]
 
-    N_REDUCE --> N_MISS["missing<br/>Target dikurangi jumlah kandidat<br/>terdaftar per jenis"]
+    N_REDUCE --> N_MISS["missing awal<br/>Target dikurangi jumlah kandidat<br/>terdaftar per jenis"]
     N_CAND -.-> N_MISS
     N_MISPLACE -.-> N_NOTE["Missing menghitung kandidat terdaftar,<br/>termasuk yang tidak layak.<br/>Missing 0 belum berarti semua layak."]
     N_BAD -.-> N_NOTE
