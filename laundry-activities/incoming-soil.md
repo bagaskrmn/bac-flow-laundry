@@ -5,21 +5,24 @@ flowchart TD
     N_IN["Input:<br/>type = IN<br/>id = ID lokasi/RS<br/>scan_device, Array tag_id"]
 
     N_IN --> N_LOOKUP["Cari registrasi dan riwayat tag"]
-    
+
     N_LOOKUP --> N_UNREG["Tag tidak ditemukan<br/>unregistered"]
     N_LOOKUP --> N_CHECK_ISS{"last_activity_code == ISS?"}
-    
+
     N_CHECK_ISS -->|Ya| N_ALREADY["already_incoming_soil"]
     N_CHECK_ISS -->|Tidak| N_CHECK_ACT{"last_activity_code != OSS / DPS?"}
-    
-    N_CHECK_ACT -->|Ya| N_CHECK_LOC{"is_on_provider = TRUE<br/>ATAU location_id != request location?"}
-    N_CHECK_LOC -->|Ya| N_OTHERLOC["from_other_location"]
-    N_CHECK_LOC -->|Tidak| N_ADD_NEWREQ["from_additional<br/>Lanjut ke NEWREQ-ADD"]
-    
+
+    N_CHECK_ACT -->|Ya| N_CHECK_PROV{"is_on_provider == TRUE?"}
+    N_CHECK_PROV -->|Ya| N_OTHERLOC["from_other_location"]
+    N_CHECK_PROV -->|Tidak| N_CHECK_LOC2{"linen location_id == req location_id?"}
+    N_CHECK_LOC2 -->|Ya| N_ADD_NEWREQ["Additional<br/>Lanjut ke NEWREQ-ADD"]
+    N_CHECK_LOC2 -->|Tidak| N_OTHERLOC
+
     N_CHECK_ACT -->|Tidak| N_HISTORY["Hubungan transaksi:<br/>tag → linen_activities<br/>→ laundry_activities → transactions"]
 
-    N_HISTORY --> N_FILTER["Filter hubungan transaksi:<br/>location_transaction = id request"]
-    N_FILTER --> N_IDS["Ambil transaction_id unik"]
+    N_HISTORY --> N_FILTER{"location_transaction == location_id request?"}
+    N_FILTER -->|Ya| N_IDS["Ambil transaction_id unik"]
+    N_FILTER -->|Tidak| N_OTHERLOC
     N_IDS --> N_BASE["Baseline:<br/>tag kategori MATCHED<br/>pada aktivitas OSS<br/>dari transaksi yang ditemukan"]
 
     N_BASE --> N_EXISTS{"Baseline ditemukan?"}
@@ -27,11 +30,10 @@ flowchart TD
     N_EXISTS -->|Ya| N_COMP["Bandingkan baseline OSS<br/>dengan semua tag terdaftar yang discan"]
 
     N_COMP --> N_MATCH["matched<br/>Tag OSS ikut discan"]
-    N_COMP --> N_MISS["missing<br/>Tag OSS tidak discan"]
-    N_COMP --> N_ADD["additional<br/>Tag terdaftar di luar baseline"]
+    N_COMP --> N_MISS["missing<br/>Tag OSS tidak discan - tag yang sudah ter-ISS"]
+    N_COMP -.-> N_ADDNOTE["Catatan: Hasil ini tidak lagi ada Additional<br/>karena masuk ke from_other_location"]
     N_MATCH --> N_RES["Respons match"]
     N_MISS --> N_RES
-    N_ADD --> N_RES
     N_UNREG --> N_RES
     N_ALREADY --> N_RES
     N_OTHERLOC --> N_RES
