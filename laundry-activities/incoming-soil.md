@@ -5,7 +5,7 @@
 flowchart TD
     N_IN["Input:<br/>type = IN<br/>id = ID lokasi/RS<br/>scan_device, Array tag_id"]
 
-    N_IN --> N_LOOKUP["Cari registrasi dan riwayat tag"]
+    N_IN --> N_LOOKUP["Cari linen dari tag_id"]
 
     N_LOOKUP --> N_UNREG["Tag tidak ditemukan<br/>unregistered"]
     N_LOOKUP --> N_CHECK_ISS{"last_activity_code == ISS?"}
@@ -41,6 +41,8 @@ flowchart TD
     N_ADD_NEWREQ --> N_RES
 
     N_FILTER -.-> N_LOCNOTE["Filter lokasi menentukan baseline.<br/>Tag dari lokasi lain tetap bisa<br/>masuk additional."]
+
+    class N_CHECK_ISS,N_CHECK_ACT danger
 ```
 
 ## Submit
