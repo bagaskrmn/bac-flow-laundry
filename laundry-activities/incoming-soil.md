@@ -13,7 +13,7 @@ flowchart TD
     N_CHECK_ISS -->|Ya| N_ALREADY["already_incoming_soil"]
     N_CHECK_ISS -->|Tidak| N_CHECK_ACT{"last_activity_code != OSS / DPS?"}
 
-    N_CHECK_ACT -->|Ya| N_CHECK_PROV{"is_on_provider == TRUE?"}
+    N_CHECK_ACT -->|Ya| N_CHECK_PROV{"Lokasi di BAC"}
     N_CHECK_PROV -->|Ya| N_OTHERLOC["from_other_location"]
     N_CHECK_PROV -->|Tidak| N_CHECK_LOC2{"linen location_id == req location_id?"}
     N_CHECK_LOC2 -->|Ya| N_ADD_NEWREQ["Additional<br/>Lanjut ke NEWREQ-ADD"]
@@ -30,19 +30,23 @@ flowchart TD
     N_EXISTS -->|Tidak| N_EMPTY["HTTP 200<br/>No transaction found<br/>data = null"]
     N_EXISTS -->|Ya| N_COMP["Bandingkan baseline OSS<br/>dengan semua tag terdaftar yang discan"]
 
-    N_COMP --> N_MATCH["matched<br/>Tag OSS ikut discan"]
+    
+    N_COMP -->N_CEKINC{"Apakah Tag sudah ter-incoming soil<br/>di transaksi tersebut?"}
+    N_CEKINC -->|Ya|N_ALREADY
+    N_CEKINC -->|Tidak| N_MATCHED["Linen Matched Final"]
+
     N_COMP --> N_MISS["missing<br/>Tag OSS tidak discan - tag yang sudah ter-ISS"]
     N_COMP -.-> N_ADDNOTE["Catatan: Hasil ini tidak lagi ada Additional<br/>karena masuk ke from_other_location"]
-    N_MATCH --> N_RES["Respons match"]
-    N_MISS --> N_RES
+    N_MISS --> N_RES["Respons match"]
     N_UNREG --> N_RES
     N_ALREADY --> N_RES
     N_OTHERLOC --> N_RES
     N_ADD_NEWREQ --> N_RES
+    N_MATCHED --> N_RES
 
     N_FILTER -.-> N_LOCNOTE["Filter lokasi menentukan baseline.<br/>Tag dari lokasi lain tetap bisa<br/>masuk additional."]
 
-    class N_CHECK_ISS,N_CHECK_ACT danger
+    class N_CHECK_ISS,N_CHECK_ACT,N_CEKINC,N_ALREADY,N_CHECK_PROV,N_CHECK_LOC2,N_OTHERLOC,N_ALREADY danger
 ```
 
 ## Submit
@@ -50,7 +54,7 @@ flowchart TD
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
-    N_IN["Payload:<br/>type = IN, id lokasi/RS<br/>scan_device, weight<br/>Array matched, Array missing, Array additional"]
+    N_IN["Payload:<br/>type = IN, id lokasi/RS<br/>scan_device, weight<br/>Seluruh data proses Match"]
 
     N_IN --> N_GROUP["Gabungkan matched + missing<br/>Kelompokkan berdasarkan<br/>transaction_id pada setiap item"]
 
