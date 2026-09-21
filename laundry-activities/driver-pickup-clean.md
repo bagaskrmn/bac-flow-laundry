@@ -24,7 +24,11 @@ flowchart TD
 
     N_COMP -->N_MS["Missing: Ada di Target<br/>tapi tidak ada di Input"]
     N_COMP -->N_MATCH["Matched: Ada di Target<br/>dan di Input"]
-    N_COMP -->N_ADD["Additional: Tidak ada di Target<br/>tapi ada di Input"]
+    N_COMP -->N_PS{"Apakah aktivitas terakhir PS?"}
+    N_PS -->|Ya| N_LASTPS["For Other Transactions"]
+    N_PS -->|Tidak| N_LASTNOTPS["Not Packed"]
+
+    class N_PS,N_LASTPS,N_LASTNOTPS danger
 
 ```
 
