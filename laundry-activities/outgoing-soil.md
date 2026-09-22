@@ -24,8 +24,8 @@ flowchart TD
     N_EXIST --> N_INACC
     N_INACC -->|Ya| N_ALREADY
     N_INACC -->|Tidak| N_LOC{"Lokasi Linen = Lokasi User<br/>atau di BAC(is_on_provider TRUE)?"}
-    N_LOC -->|Ya| N_OTHERLOC["in_other_location"]
-    N_LOC -->|Tidak| N_READY["registered<br/>Dikelompokkan per jenis linen"]
+    N_LOC -->|Tidak| N_OTHERLOC["in_other_location"]
+    N_LOC -->|Ya| N_READY["registered<br/>Dikelompokkan per jenis linen"]
 
     N_READY --> N_RES["Respons:<br/>accumulated_transaction_id<br/>registered<br/>already_outgoing<br/>unregistered<br/>in_other_location"]
     N_ALREADY --> N_RES

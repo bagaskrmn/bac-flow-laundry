@@ -61,6 +61,12 @@
       name: 'Laundry Flow',
       repo: '',
       loadSidebar: true,
+      alias: {
+        '/.*/_sidebar.md': '/_sidebar.md'
+      },
+      requestHeaders: {
+        'cache-control': 'no-cache'
+      },
       subMaxLevel: 2,
       markdown: {
         renderer: {

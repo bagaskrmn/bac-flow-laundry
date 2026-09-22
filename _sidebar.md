@@ -1,5 +1,7 @@
 - [Beranda](/)
 
+- [Full Laundry Flow](/laundry-flow/laundry-flow)
+
 - **Laundry Activities**
   - [Outgoing Soil](laundry-activities/outgoing-soil.md)
   - [Driver Pickup Soil](laundry-activities/driver-pickup-soil.md)
