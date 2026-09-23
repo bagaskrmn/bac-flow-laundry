@@ -26,8 +26,10 @@ flowchart TD
     N_COMP --> |tidak ter-scan tp ada di OSS|N_MISS["missing<br/>Ada di baseline, tidak discan"]
     N_COMP --> |ter-scan tp tidak ada di OSS|N_CHECK_ADD{"location_id = lokasi linen=lokasi<br/>transaction_id terpilih/di BAC?"}
 
-    N_CHECK_ADD -->|Ya| N_NOT_OUT["not_outgoing<br/>Terdaftar, di luar baseline dan lokasi sama"]
+    N_CHECK_ADD -->|Ya| N_OSSDPS{"Cek aktivitas terakhir tag_id<br/>apakah OSS/DPS?"}
     N_CHECK_ADD -->|Tidak| N_ADD["additional<br/>Terdaftar, di luar baseline dan beda lokasi"]
+    N_OSSDPS -->|Ya|N_ADD
+    N_OSSDPS -->|Tidak| N_NOT_OUT["not_outgoing<br/>Terdaftar, di luar baseline dan lokasi sama"]
 
     N_MATCH --> N_GROUP["Kelompokkan per jenis:<br/>linen_type_id, name, count, Array tag_id"]
     N_MISS --> N_GROUP
@@ -36,7 +38,7 @@ flowchart TD
     N_GROUP --> N_RES["Respons kategori"]
     N_UNREG --> N_RES
 
-    class N_CHECK_ADD,N_NOT_OUT danger
+    class N_CHECK_ADD,N_NOT_OUT,N_OSSDPS danger
 ```
 
 ## Submit
