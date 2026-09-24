@@ -20,14 +20,14 @@ flowchart TD
 
     N_CAND --> N_OUT{"Scan terakhir = Outgoing Soil<br/>atau Driver Pickup Soil<br/>atau Driver Pickup Soil Scan?"}
     N_OUT -->|Ya| N_ALREADY["already_outgoing"]
-    N_OUT -->|Tidak| N_INACC{"Tag sudah ada<br/>di OSS transaksi akumulasi?"}
+    N_OUT -->|Tidak| N_INACC{"[Compare]<br/>Tag sudah ada<br/>di OSS transaksi akumulasi?"}
     N_EXIST --> N_INACC
     N_INACC -->|Ya| N_ALREADY
     N_INACC -->|Tidak| N_LOC{"Lokasi Linen = Lokasi User<br/>atau di BAC(is_on_provider TRUE)?"}
-    N_LOC -->|Tidak| N_OTHERLOC["in_other_location"]
+    N_LOC -->|Tidak| N_OTHERLOC["from_other_location"]
     N_LOC -->|Ya| N_READY["registered<br/>Dikelompokkan per jenis linen"]
 
-    N_READY --> N_RES["Respons:<br/>accumulated_transaction_id<br/>registered<br/>already_outgoing<br/>unregistered<br/>in_other_location"]
+    N_READY --> N_RES["Respons:<br/>accumulated_transaction_id<br/>registered<br/>already_outgoing<br/>unregistered<br/>from_other_location"]
     N_ALREADY --> N_RES
     N_UNREG --> N_RES
     N_OTHERLOC --> N_RES
@@ -49,10 +49,10 @@ flowchart TD
     N_IN -->N_ELSE["Match selain Registered"]
     N_ELSE -->N_PROC["Dilakukan Pencatatan di DB"]
 
-    N_MODE -->|Tidak| N_NEW["Buat transaksi TRX baru<br/>lokasi = user login"]
+    N_MODE -->|Tidak| N_NEW["Buat transaksi TRX baru<br/>1 row transaksi baru<br/>lokasi = user login"]
     N_NEW --> N_ACT["Buat aktivitas OSS<br/>status aktivitas = SOIL<br/>berat dan biaya dari payload"]
 
-    N_MODE -->|Ya| N_OLD["Gunakan transaksi akumulasi"]
+    N_MODE -->|Ya| N_OLD["Gunakan transaksi akumulasi<br/>update table transactions"]
     N_OLD --> N_ADD["Ambil aktivitas OSS existing<br/>Tambah berat dan hitung ulang biaya<br/>Tambah jumlah per jenis"]
 
     N_ACT --> N_DETAIL["Simpan rekap jenis linen<br/>dan rincian tag registered<br/>category = MATCHED, status = SOIL"]

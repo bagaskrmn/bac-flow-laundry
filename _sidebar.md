@@ -9,3 +9,5 @@
   - [Packing Scan](laundry-activities/packing-scan.md)
   - [Driver Pickup Clean](laundry-activities/driver-pickup-clean.md)
   - [Incoming Clean](laundry-activities/incoming-clean.md)
+
+- [Submit Activity Flow](/laundry-flow/submit-be-process)
