@@ -27,7 +27,7 @@ flowchart TD
     N_COMP --> |ter-scan tp tidak ada di OSS|N_CHECK_ADD{"location_id = lokasi linen=lokasi<br/>transaction_id terpilih/di BAC?"}
 
     N_CHECK_ADD -->|Ya| N_OSSDPS{"Cek aktivitas terakhir tag_id<br/>apakah OSS/DPS?"}
-    N_CHECK_ADD -->|Tidak| N_ADD["additional<br/>Terdaftar, di luar baseline dan beda lokasi"]
+    N_CHECK_ADD -->|Tidak| N_ADD["from_other_location<br/>Terdaftar, di luar baseline dan beda lokasi"]
     N_OSSDPS -->|Ya|N_ADD
     N_OSSDPS -->|Tidak| N_NOT_OUT["not_outgoing<br/>Terdaftar, di luar baseline dan lokasi sama"]
 
