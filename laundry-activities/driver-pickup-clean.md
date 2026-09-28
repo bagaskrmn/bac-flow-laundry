@@ -3,7 +3,7 @@
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
-    N_IN["Hanya berisi transactions yang memiliki PS,<br/>tidak memiliki DPC, dan Commited"]
+    N_IN["Hanya berisi transactions yang memiliki PS,<br/>tidak memiliki DPC atau IC(untuk menghalau IC dulu baru DPC)<br/> dan Commited"]
 
     class N_IN danger
 

@@ -29,7 +29,7 @@ flowchart TD
     N_OWNER -->|Tidak| N_MISPLACE["missplaced"]
     N_OWNER -->|Ya| N_CLEAN{"status CLEAN dan kondisi tag GOOD?"}
     N_CLEAN -->|Ya| N_ELIGIBLE["Linen layak"]
-    N_CLEAN -->|Tidak| N_BAD["Jika bukan CLEAN atau WEAK:<br/>unproccessable_tag"]
+    N_CLEAN -->|Tidak| N_BAD["Jika bukan CLEAN<br/>soil"]
 
     N_TARGET --> N_REDUCE["Target Akhir = Target Awal - Already Packed"]
     N_PACKED --> N_REDUCE

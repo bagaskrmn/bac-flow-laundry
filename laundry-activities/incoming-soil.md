@@ -36,7 +36,6 @@ flowchart TD
     N_CEKINC -->|Tidak| N_MATCHED["Linen Matched Final"]
 
     N_COMP -.-> N_ADDNOTE["Catatan: Hasil ini tidak lagi ada Additional<br/>karena masuk ke from_other_location"]
-    N_MISS --> N_RES["Respons match"]
     N_UNREG --> N_RES
     N_ALREADY --> N_RES
     N_OTHERLOC --> N_RES
