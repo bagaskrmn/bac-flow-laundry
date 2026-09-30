@@ -22,7 +22,7 @@ flowchart TD
     N_BASE --> N_COMP["Bandingkan tag ID"]
     N_REGISTERED --> N_COMP
 
-    N_COMP -->|beririsan| N_MATCH["registered<br/>Ada di baseline dan discan"]
+    N_COMP -->|beririsan| N_MATCH["Matched<br/>Ada di baseline dan discan"]
     N_COMP --> |tidak ter-scan tp ada di OSS|N_MISS["missing<br/>Ada di baseline, tidak discan"]
     N_COMP --> |ter-scan tp tidak ada di OSS|N_CHECK_ADD{"location_id = lokasi linen=lokasi<br/>transaction_id terpilih/di BAC?"}
 
@@ -47,9 +47,9 @@ flowchart TD
 %%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Payload:<br/>activity_code = DPS<br/>transaction_id, activity_name<br/>scan_device, weight<br/>semua data hasil response Match"]
-    N_IN --> N_NMATCH["Payload selain REGISTERED dan NOT OUTGOING"]
+    N_IN --> N_NMATCH["Payload selain MATCHED dan NOT OUTGOING"]
     N_NMATCH --> N_NOTES["Catat ke DB"]
-    N_IN --> N_MATCH["Payload Registered"]
+    N_IN --> N_MATCH["Payload MATCHED"]
     N_MATCH --> N_ACT["Update transaksi menjadi DPS<br/>Buat aktivitas DPS / SOIL<br/>Berat dari payload"]
     N_IN -->N_OSS2["Payload 'Not Outgoing'"]
     N_OSS2 -->N_ISSPS{"Cek apakah request<br/>transaction_id sudah punya ISS/PS?"}
