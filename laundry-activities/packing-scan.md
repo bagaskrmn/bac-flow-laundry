@@ -17,8 +17,8 @@ flowchart TD
     N_IN --> N_MASTER["Cari registrasi + jenis linen<br/>status, kondisi, kepemilikan"]
     N_MASTER --> N_FOUND{"Registrasi ditemukan?"}
     N_FOUND -->|Tidak| N_UNREG["Tidak ditemukan<br/>unregistered"]
-    N_FOUND -->|Ya| N_LAST["Cek Aktivitas terakhir Tag ID"]
-    N_LAST --> N_OTHER{"Scan terakhir Packing Scan<br/>untuk transaksi lain?"}
+    N_FOUND -->|Ya| N_LAST["Cek Aktivitas dan transaksi terakhir Tag ID"]
+    N_LAST --> N_OTHER{"Scan terakhir PS ATAU DPC<br/>untuk transaksi lain?"}
     N_OTHER -->|Ya| N_O["in_other_transaction<br/>Keluarkan dari kandidat"]
     N_OTHER -->|Tidak| N_CAND["Kandidat berikutnya"]
     N_IN --> N_EXIST["Cari PS existing pada transaction ID yang sama<br/>Ambil tag yang sudah dipacking"]
@@ -27,17 +27,13 @@ flowchart TD
     N_WAS -->|Ya| N_PACKED["already_packed<br/>Keluarkan dari kandidat"]
     N_WAS -->|Tidak| N_OWNER{"Linen milik lokasi yang sama dengan lokasi<br/> transaksi ATAU milik BAC?"}
     N_OWNER -->|Tidak| N_MISPLACE["missplaced"]
-    N_OWNER -->|Ya| N_CLEAN{"status CLEAN dan kondisi tag GOOD?"}
+    N_OWNER -->|Ya| N_CLEAN{"status CLEAN?"}
     N_CLEAN -->|Ya| N_ELIGIBLE["Linen layak"]
-    N_CLEAN -->|Tidak| N_BAD["Jika bukan CLEAN<br/>soil"]
+    N_CLEAN -->|Tidak| N_BAD["SOIL"]
 
     N_TARGET --> N_REDUCE["Target Akhir = Target Awal - Already Packed"]
-    N_PACKED --> N_REDUCE
+    N_PACKED -.-> N_REDUCE
     N_ELIGIBLE --> N_COMP["Bandingkan jenis dan kuota"]
-
-    N_COMP --> N_COMM{"Apakah Linen Layak >= Target Akhir?<br/>Tanpa memandang tipe. Hanya total qty"}
-    N_COMM -->|Ya| N_AUTO["Auto Commit"]
-    N_COMM -->|Tidak| N_ADMIN["Perlu Commit Admin"]
 
     N_REDUCE --> N_COMP
     N_COMP --> N_MATCH["matched<br/>Jenis sesuai, dalam kuota"]
@@ -48,10 +44,12 @@ flowchart TD
     N_MISS -->N_RES["Response Data"]
     N_ADD -->N_RES
     N_MATCH -->N_RES
-    N_AUTO -->N_RES
-    N_ADMIN -->N_RES
+    N_MISPLACE -->N_RES
+    N_BAD -->N_RES
+    N_PACKED -->N_RES
+    N_O -->N_RES
 
-    class N_COMM,N_AUTO,N_ADMIN danger
+    class N_RES,N_MISS,N_ADD,N_MATCH,N_MISPLACE,N_BAD,N_PACKED,N_O info
 ```
 
 ## Submit
