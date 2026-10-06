@@ -43,11 +43,16 @@ flowchart TD
 %%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Payload:<br/>activity_code, activity_name, scan_device<br/>weight, seluruh response Proses Match<br/>accumulated_transaction_id"]
-    N_IN -->N_REGIST["Match yang Matched"]
+    N_IN -->N_REGIST["Matched"]
     N_REGIST -->N_MODE{"ID akumulasi terisi?"}
 
-    N_IN -->N_ELSE["Match selain Matched"]
-    N_ELSE -->N_PROC["Dilakukan Pencatatan di DB"]
+    N_IN -->N_ALREADY["Already Outgoing"]
+    N_ALREADY -->N_UPDLL["Update Updated_at"]
+    N_ALREADY -->N_AST["Insert AST"]
+
+    N_IN -->N_FROMOTHLOC["From Other Location"]
+    N_FROMOTHLOC -->N_UPDLL
+    N_FROMOTHLOC -->N_AST
 
     N_MODE -->|Tidak| N_NEW["Buat transaksi TRX baru<br/>1 row transaksi baru<br/>lokasi = user login"]
     N_NEW --> N_ACT["Buat aktivitas OSS<br/>status aktivitas = SOIL<br/>berat dan biaya dari payload"]
@@ -62,7 +67,5 @@ flowchart TD
     N_MASTER --> N_BILL["Sinkronkan billing harian<br/>jumlah tag + berat"]
     N_BILL --> N_DONE["Commit dan respons sukses"]
 
-    N_IN -.-> N_TRUST["Submit tidak mengulang match:<br/>already_outgoing, In Other Location dan kelayakan<br/>akumulasi tidak diperiksa ulang"]
-
-    class N_ELSE,N_PROC danger
+    class N_ALREADY,N_UPDLL,N_AST,N_FROMOTHLOC, danger
 ```
