@@ -47,14 +47,26 @@ flowchart TD
 %%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
     N_IN["Payload:<br/>activity_code = DPS<br/>transaction_id, activity_name<br/>scan_device, weight<br/>semua data hasil response Match"]
-    N_IN --> N_NMATCH["Payload selain MATCHED dan NOT OUTGOING"]
-    N_NMATCH --> N_NOTES["Catat ke DB"]
-    N_IN --> N_MATCH["Payload MATCHED"]
+    N_IN --> N_MATCH["Matched"]
     N_MATCH --> N_ACT["Update transaksi menjadi DPS<br/>Buat aktivitas DPS / SOIL<br/>Berat dari payload"]
-    N_IN -->N_OSS2["Payload 'Not Outgoing'"]
+    N_IN -->N_OSS2["Not Outgoing"]
     N_OSS2 -->N_ISSPS{"Cek apakah request<br/>transaction_id sudah punya ISS/PS?"}
     N_ISSPS -->|Ya| N_CREATETRX["Buat transaksi baru"]
     N_ISSPS -->|Tidak| N_ACCUMULATE["Akumulasi dengan request transaction ID"]
+
+    N_IN -->N_ADD["Additional"]
+    N_IN -->N_MISSING["Missing"]
+    N_IN -->N_UNREG["Unregsitered"]
+
+    N_ADD -->N_INSLL["Insert Laundry Linens by tipe/qty<br/>dengan Category"]
+    N_ADD -->N_INSLA["Insert Linen Activities by tag dan type<br/>dengan Category"]
+    N_ADD -->N_INSAST["Insert Activity Scan Tag by tag dan type<br/>dengan Category"]
+    N_ADD -->N_UPDLL["Update Updated At Linen Lists"]
+
+    N_MISSING -->N_INSLL
+    N_MISSING -->N_INSLA
+    N_UNREG -->N_INSLL
+    N_UNREG -->N_INSLA
 
 
     N_ACT --> N_QTY["Rekap jumlah per jenis"]
@@ -64,5 +76,5 @@ flowchart TD
     N_SCAN --> N_MASTER["Update master tag aktual:<br/>status = SOIL<br/>is_on_provider = false<br/>location_id = lokasi transaksi<br/>last_scaning_date dan updated_at<br/>last_activity_code,last_transaction_id<br/>last_transaction_location_id"]
     N_MASTER --> N_DONE["Commit dan respons sukses"]
 
-    class N_NMATCH,N_NOTES,N_OSS2,N_ISSPS,N_CREATETRX,N_ACCUMULATE danger
+    class N_NOTES,N_OSS2,N_ISSPS,N_CREATETRX,N_ACCUMULATE,N_ADD,N_MISSING,N_UNREG,N_INSLL,N_INSLA,N_INSAST,N_UPDLL danger
 ```
