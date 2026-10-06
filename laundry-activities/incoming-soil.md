@@ -42,8 +42,6 @@ flowchart TD
     N_ADD_NEWREQ --> N_RES
     N_MATCHED --> N_RES
 
-    N_FILTER -.-> N_LOCNOTE["Filter lokasi menentukan baseline.<br/>Tag dari lokasi lain tetap bisa<br/>masuk additional."]
-
     class N_CHECK_ISS,N_CHECK_ACT,N_CEKINC,N_ALREADY,N_CHECK_PROV,N_CHECK_LOC2,N_OTHERLOC,N_ALREADY danger
 ```
 
@@ -52,32 +50,28 @@ flowchart TD
 ```mermaid
 %%{init: {'flowchart': {'curve': 'linear', 'nodeSpacing': 60, 'rankSpacing': 80, 'diagramPadding': 24}}}%%
 flowchart TD
-    N_IN["Payload:<br/>type = IN, id lokasi/RS<br/>scan_device, weight<br/>Seluruh data proses Match"]
+    N_IN["Payload:<br/>location_id,scan_device<br/>Seluruh data proses Match"]
+    N_IN -->N_MATCHED["Matched"]
+    N_MATCHED -->N_UPDTRX["Update Transactions"]
+    N_MATCHED -->N_LAUNDLIN["Insert/Update Laundry Linens"]
+    N_MATCHED -->N_LA["Insert Linen Activities"]
+    N_MATCHED -->N_AST["Insert Activity Scan Tag"]
+    N_MATCHED -->N_UPDLIN["Update Linen Lists"]
 
-    N_IN --> N_GROUP["Gabungkan matched + missing<br/>Kelompokkan berdasarkan<br/>transaction_id pada setiap item"]
 
-    N_GROUP --> N_WEIGHT{"Weight kosong atau 0?"}
-    N_WEIGHT -->|Ya| N_AUTO["Berat per transaksi<br/>= jumlah weight_kg matched"]
-    N_WEIGHT -->|Tidak| N_SPLIT["Berat per transaksi<br/>= weight total / jumlah transaksi"]
-    N_AUTO --> N_ACT["Untuk setiap transaksi:<br/>buat aktivitas ISS baru / SOIL"]
-    N_SPLIT --> N_ACT
+    N_IN -->N_ALREADYINC["Already Incoming Soil"]
+    N_ALREADYINC -->N_AST
+    N_ALREADYINC -->N_UPDLIN
 
-    N_ACT --> N_QTY["Rekap jumlah per jenis<br/>dari matched saja"]
-    N_ACT --> N_DETAIL["Riwayat linen:<br/>matched → MATCHED<br/>missing → MISSING"]
-    N_ACT --> N_TRX["last_activity_code = ISS"]
-    N_DETAIL --> N_SCAN["Scan Incoming Soil<br/>untuk matched saja<br/>provider = provider user"]
+    N_IN -->N_ADD["Additional"]
+    N_ADD -->N_NEWREQADD["Create New Req ADD"]
+    N_ADD -->N_AST
+    N_ADD -->N_UPDLIN
 
-    N_IN --> N_ADD{"Additional ada?"}
-    N_ADD -->|Ya| N_REQ["Buat satu NEWREQ-ADD<br/>lokasi = id request<br/>status = Approved<br/>sumber = Additional Incoming Soil"]
-    N_REQ --> N_REQDETAIL["Detail request:<br/>jumlah per linen_type_id"]
-    N_REQDETAIL --> N_ADDSCAN["Scan Incoming Soil untuk additional<br/>transaction_id scan = ID request baru<br/>provider = provider user"]
+    N_IN -->N_FROMOTHER["From Other Location"]
+    N_FROMOTHER -->N_AST
+    N_FROMOTHER -->N_UPDLIN
 
-    N_SCAN --> N_MASTER["Update master matched + additional:<br/>status = SOIL<br/>is_on_provider = true<br/>updated_at"]
-    N_ADDSCAN --> N_MASTER
-    N_MASTER --> N_DONE["Commit dan respons sukses"]
-
-    N_DETAIL -.-> N_MNOTE["Missing:<br/>tidak update master<br/>tidak membuat request pengganti"]
-    N_REQ -.-> N_ANOTE["Additional tidak dibuatkan<br/>aktivitas ISS atau rincian linen ISS sendiri.<br/>Tidak masuk rekap ISS transaksi OSS."]
 ```
 
 ## 1 Scan 2 Transaksi dengan lokasi yang sama
