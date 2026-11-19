@@ -11,3 +11,5 @@
   - [Incoming Clean](laundry-activities/incoming-clean.md)
 
 - [Submit Activity Flow](/laundry-flow/submit-be-process)
+
+- [Cancel Packing](/laundry-flow/cancel-packing)
